@@ -20,7 +20,7 @@ function iot_register_handler()
 		$university =  $form->post('iot_user_university', 'University', 'sanitize_string');
 		$bio =  $form->post('iot_bio', 'Bio', 'sanitize_string');
 		if (!$form->errors()) {
-			if(empty($user)){
+			if(empty($user)||$user->ID==0){
 				$errors = register_new_user($email, $email);
 				if (is_wp_error($errors)) {
 					$form->errors['email'] = " Error! Email is duplicated!";
@@ -85,11 +85,11 @@ function iot_register_handler()
 
 function iot_profile_handler(){
 	$user=get_user_by('id',$_GET['user_id']??wp_get_current_user());
-	if(empty($user)){
+	if(empty($user)||$user->ID==0){
 		echo 'No user!';
 		return;
 	}
-	if($user->ID==wp_get_current_user())
+	if($user==wp_get_current_user())
 		return iot_register_handler();
 
 	$dfname=$user->first_name??'';
@@ -108,7 +108,7 @@ function obfuscate_email($email)
 {
     $em   = explode("@",$email);
 
-    return $em[0] . " at ". str_repeat('*', 3)  . substr($em[0],3);   
+    return $em[0] . " at ". str_repeat('*', 3)  . substr($em[1],3);   
 }
 function wrap_data($title,$value){
 	?>

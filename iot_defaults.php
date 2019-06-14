@@ -17,7 +17,8 @@ const IOT_FRM_POST_UNIVERSITY = 'iot_frm_post_university';
 
 function findpost($university, $department, $question,$edit,$user)
 {
-    if($edit&&!current_user_can('edit_others_iots')){
+
+    if($user!=wp_get_current_user()){
         $args = array(
             'post_type' => IOT_POST_TYPE,
             'post_status' => 'publish',

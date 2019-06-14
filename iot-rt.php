@@ -11,6 +11,7 @@ GitHub Plugin URI: https://github.com/modaresimr/iot-rt-plugin
 require_once 'iot_defaults.php';
 require_once 'iot_posttype.php';
 require_once 'iot_widget.php';
+require_once 'iot_login_widget.php';
 require_once 'user_manager.php';
 
 add_shortcode('iot_q', 'iot_q_handler');
@@ -104,7 +105,12 @@ function iot_q_handler($atts, $content = null)
 	if (empty($atts['question']))
 		return;
 
-	$user = wp_get_current_user();
+	$user =wp_get_current_user();
+	if(!empty($_GET['user_id'])){
+		$user=get_user_by('id',$_GET['user_id']);
+		if(empty($user))
+			$user =wp_get_current_user();
+	}
 	//wp_set_object_terms($user->ID, 'University Paris 13', IOT_TAX_UNIVERSITY, true);
 	//wp_set_object_terms($user->ID, 'Network', IOT_TAX_DEPARTMENT, true);
 
@@ -134,8 +140,8 @@ function iot_q_handler($atts, $content = null)
 	// $department = $_REQUEST[IOT_TAX_DEPARTMENT] ?? $dps[0]->name;
 	$department ='Network';
 	$university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis;
-	$department_tax = get_term_by('name', $department, IOT_TAX_DEPARTMENT);
-	$university_tax = get_term_by('name', $university, IOT_TAX_UNIVERSITY);
+	//$department_tax = get_term_by('name', $department, IOT_TAX_DEPARTMENT);
+	//$university_tax = get_term_by('name', $university, IOT_TAX_UNIVERSITY);
 
 	$edit = ($_REQUEST['edit'] ?? '') == "true";
 	$question = $atts['question'];

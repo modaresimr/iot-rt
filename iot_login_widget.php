@@ -3,23 +3,23 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 include_once( 'iot_defaults.php' );
 
-function iot_load_widget()
+function iot_login_load_widget()
 {
-    register_widget('iot_widget');
+    register_widget('iot_login_widget');
 }
-add_action('widgets_init', 'iot_load_widget');
+add_action('widgets_init', 'iot_login_load_widget');
 // Creating the widget 
-class iot_widget extends WP_Widget
+class iot_login_widget extends WP_Widget
 {
     function __construct()
     {
         parent::__construct(
             // Base ID of your widget
-            'iot_widget',
+            'iot_login_widget',
             // Widget name will appear in UI
-            __('IOT UNI widget', 'iot_widget_domain'),
+            __('IOT login widget', 'iot_login_widget_domain'),
             // Widget description
-            array('description' => __('LIST DEPARTEMNT', 'iot_widget_domain'),)
+            array('description' => __('IOT LOGIN', 'iot_login_widget_domain'),)
         );
     }
     // Creating widget front-end
@@ -33,8 +33,8 @@ class iot_widget extends WP_Widget
         if (!empty($title))
             echo $args['before_title'] . $title . $args['after_title'];
         // This is where you run the code and display the output
-        //echo __('Hello, World!', 'iot_widget_domain');
-        iot_q_list_handler();
+        //echo __('Hello, World!', 'iot_login_widget_domain');
+        iot_login();
         echo $args['after_widget'];
     }
     // Widget Backend 
@@ -43,7 +43,7 @@ class iot_widget extends WP_Widget
         if (isset($instance['title'])) {
             $title = $instance['title'];
         } else {
-            $title = __('Title', 'iot_widget_domain');
+            $title = __('Title', 'iot_login_widget_domain');
         }
         // Widget admin form
         ?>
@@ -60,21 +60,29 @@ public function update($new_instance, $old_instance)
     $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
     return $instance;
 }
-} // Class iot_widget ends here
+} // Class iot_login_widget ends here
 
 
 
 
 
 
-function iot_q_list_handler(){
+function iot_login(){
 
- $taxName = IOT_TAX_UNIVERSITY;
-$terms = get_terms(IOT_TAX_UNIVERSITY,array('parent' => 0,'orderby'=>'name'));
-echo '<div class="list-group">';
-foreach($terms as $term) {  
-   echo '<a class="list-group-item list-group-item-action '.(($_REQUEST[IOT_TAX_UNIVERSITY]??'')==$term->name?'active':'').'" href="'.site_url('/iot-wiki').'?'.IOT_TAX_UNIVERSITY.'='.$term->name.'">'.$term->name.'</a>';
-}
-echo '</div>';
+    $user=wp_get_current_user();
+    
 
+
+    if(empty($user)||$user->ID==0){
+        echo "<div class='btn-group'>";
+        echo wrap_link('Connexion',wp_login_url(),'btn btn-primary');
+        echo wrap_link('Inscription',site_url('register'),'btn btn-success');
+    }else{
+        echo wrap_link('Bienvenue'. strtoupper($user->last_name) .', '. $user->first_name ,site_url('/users').'?user_id='.$user->ID,'');
+        echo "<div class='btn-group-vertical'>";
+        echo wrap_link('Modifier votre réponse' ,site_url('/iot-wiki').'?edit=true','btn btn-primary');
+        echo wrap_link('Voir votre réponse' ,site_url('/iot-wiki').'?edit=true','btn btn-success');
+        echo wrap_link('Logout',wp_logout_url(),'btn btn-danger');
+    }
+    echo "</div>";
 }
