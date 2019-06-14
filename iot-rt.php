@@ -11,6 +11,7 @@ GitHub Plugin URI: https://github.com/modaresimr/iot-rt-plugin
 require_once 'iot_defaults.php';
 require_once 'iot_posttype.php';
 require_once 'iot_widget.php';
+require_once 'user_manager.php';
 
 add_shortcode('iot_q', 'iot_q_handler');
 
@@ -27,7 +28,7 @@ function iot_post_update()
 	// 	return;
 	// }
 		
-	$unis = get_user_meta($user->ID,'iot_user_department',true);//wp_get_object_terms($user->ID, IOT_TAX_UNIVERSITY) ?? '';
+	$unis = get_user_meta($user->ID,IOT_USR_UNIVERSITY,true);//wp_get_object_terms($user->ID, IOT_TAX_UNIVERSITY) ?? '';
 	if (empty($unis) && empty($_REQUEST[IOT_FRM_POST_UNIVERSITY])) {
 		
 		echo json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
@@ -47,7 +48,7 @@ function iot_post_update()
 	$question = $_POST[IOT_FRM_POST_QUESTION];
 	insert_taxonomies(IOT_TAX_QUESTION, $question);
 
-	$post1 = findpost($university, $department, $question);
+	$post1 = findpost($university, $department, $question,true,$user);
 	$has_permission = has_permission($post1);
 
 	if (!$has_permission || empty($_POST['iot_frm_submit'])) {
@@ -123,7 +124,7 @@ function iot_q_handler($atts, $content = null)
 	// //$department = $_REQUEST[IOT_TAX_DEPARTMENT] ?? $dps[0]->name;
 	// $department ='Network';
 	// $university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis[0]->name;
-	$unis = get_user_meta($user->ID,'iot_user_department',true);//wp_get_object_terms($user->ID, IOT_TAX_UNIVERSITY) ?? '';
+	$unis = get_user_meta($user->ID,IOT_USR_UNIVERSITY,true);
 	if (empty($unis) && empty($_REQUEST[IOT_FRM_POST_UNIVERSITY])) {
 		
 		echo json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
@@ -144,7 +145,7 @@ function iot_q_handler($atts, $content = null)
 		$tax = get_term_by('name', $question, 'iot_question');
 	}
 	
-	$post1 = findpost($university, $department, $question);
+	$post1 = findpost($university, $department, $question,$edit,$user);
 	$has_permission = has_permission($post1);
 
 	?>
@@ -235,7 +236,10 @@ function iot_add_to_content($content)
 		$university_tax=$university_tax[0];
 		echo wrap_link($university_tax->name,site_url('/iot-wiki').'?'.IOT_TAX_UNIVERSITY.'='.$university_tax->name,'badge badge-light');
 	}
-	
+	$user=get_user_by('id',$post->post_author)??'';
+	if(!empty($user)){
+		echo wrap_link(strtoupper($user->last_name) .', '. $user->first_name ,site_url('/users').'?user_id='.$user->ID,'badge badge-light');
+	}
 	echo $content;
 
 	//echo '<div class="row">';
