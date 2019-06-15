@@ -23,7 +23,7 @@ function iot_collapse_handler($atts,$content){
 	$myid=generateRandomString();
 	?>
 	<div class="">
-	<?php if(!empty($atts[title])){?>
+	<?php if(!empty($atts['title'])){?>
     <div class="card-header btn-link" id="heading<?php echo $myid?>" data-toggle="collapse" data-target="#collapse<?php echo $myid?>" aria-controls="collapse<?php echo $myid?>">
       <h5 class="mb-0">
     
