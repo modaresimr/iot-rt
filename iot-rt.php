@@ -16,9 +16,11 @@ require_once 'user_manager.php';
 
 add_shortcode('iot_q', 'iot_q_handler');
 add_shortcode('iot_collapse', 'iot_collapse_handler');
+add_shortcode('iot_collapse1', 'iot_collapse_handler');
 function iot_collapse_handler($atts,$content){
 	$atts  = shortcode_atts(array(
 		'title' => '',
+		'data-parent'=>'#main'
 	), $atts);
 	$myid=generateRandomString();
 	?>
@@ -32,7 +34,7 @@ function iot_collapse_handler($atts,$content){
       </h5>
     </div>
 	<?php } ?>
-    <div id="collapse<?php echo $myid?>" class="collapse show"   >
+    <div id="collapse<?php echo $myid?>" data-parent="#<?php echo $atts['data-parent'];?>" class="collapse show"   >
 	<?php
 	
 	do_shortcode(str_replace("]", " data-parent=#".$myid."]", $content))
