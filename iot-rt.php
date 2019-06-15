@@ -182,6 +182,10 @@ function iot_q_handler($atts, $content = null)
 	$has_permission = has_permission($post1);
 
 	?>
+	<script>
+	setTimeout(function(){$(".collapse").collapse('hide');},1000);
+	
+	</script>
 	<div class="">
     <div class="card-header btn-link" id="heading<?php echo $myid?>" data-toggle="collapse" data-target="#collapse<?php echo $myid?>" aria-controls="collapse<?php echo $myid?>">
       <h5 class="mb-0">
