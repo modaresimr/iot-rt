@@ -15,6 +15,32 @@ require_once 'iot_login_widget.php';
 require_once 'user_manager.php';
 
 add_shortcode('iot_q', 'iot_q_handler');
+add_shortcode('iot_collapse', 'iot_collapse_handler');
+function iot_collapse_handler($atts,$content){
+	$atts  = shortcode_atts(array(
+		'title' => '',
+	), $atts);
+	$myid=generateRandomString();
+	?>
+	<div class="">
+	<?php if(!empty($atts[title])){?>
+    <div class="card-header btn-link" id="heading<?php echo $myid?>" data-toggle="collapse" data-target="#collapse<?php echo $myid?>" aria-controls="collapse<?php echo $myid?>">
+      <h5 class="mb-0">
+    
+          <?php echo $atts[title]; ?>
+    
+      </h5>
+    </div>
+	<?php } ?>
+    <div id="collapse<?php echo $myid?>" class="collapse show"   >
+	<?php
+	
+	do_shortcode(str_replace("]", " data-parent=#".$myid."]", $content))
+	?>
+	</div>
+	</div>
+	<?php
+}
 
 function iot_post_update()
 {
@@ -101,6 +127,7 @@ function iot_q_handler($atts, $content = null)
 	ob_start();
 	$atts  = shortcode_atts(array(
 		'question' => '',
+		'data-parent'=>'#main'
 	), $atts);
 	if (empty($atts['question']))
 		return;
@@ -164,7 +191,7 @@ function iot_q_handler($atts, $content = null)
       </h5>
     </div>
 
-    <div id="collapse<?php echo $myid?>" class="collapse show"  >
+    <div id="collapse<?php echo $myid?>" class="collapse show" data-parent="#main"  >
       
         
 <?php

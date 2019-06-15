@@ -61,15 +61,18 @@ function iot_register_handler()
 	}
 	echo $form->form_open('', '', esc_url($_SERVER['REQUEST_URI']));
 	echo $form->messages();
+	
 	$dfname=$user->first_name??'';
 	$dlname=$user->last_name??'';
 	$demail=$user->user_email??'';
 	$dbio=get_user_meta($user->ID,IOT_USR_BIO,true)??'';
 	$duuni=get_user_meta($user->ID,IOT_USR_UNIVERSITY,true)??'';
-	if(!empty($user)){
-		$dfname=$user->first_name;
-		$dfname=$user->first_name;
-
+	if(empty($user)||$user->ID==0){
+		$dfname='';
+		$dfname='';
+		$dbio='';
+		$duuni='';
+		$demail='';
 	}
 	echo $form->input_text('iot_fname', 'First Name',$dfname);
 	echo $form->input_text('iot_lname', 'Last Name',$dlname);
