@@ -220,7 +220,7 @@ function iot_q_handler($atts, $content = null)
 				$metas = get_post_meta($post1->ID);
 
 			if ($has_permission && $edit) {
-				echo wrap_link('Filter question', get_term_link($tax), 'badge badge-light');
+				echo wrap_link('Filtrer par question', get_term_link($tax), 'badge badge-light');
 				echo '<form method="post" id="form_' . $myid . '" class="iot-form" action="' . admin_url('admin-ajax.php') . '">';
 				echo '<input type="hidden" name="action" value="iot_post_update"/>';
 				echo '<input type="hidden" name="' . IOT_FRM_POST_QUESTION . '" value="' . $tax->slug . '"/>';
@@ -241,8 +241,8 @@ function iot_q_handler($atts, $content = null)
 				//echo '</div>';
 			} else {
 				if ($post1->ID == 0) {
-					echo wrap_link('Filter question', get_term_link($tax), 'badge badge-light');
-					echo '<p>No content yet</p>';
+					echo wrap_link('Filtrer par question', get_term_link($tax), 'badge badge-light');
+					echo '<p>Pas encore de texte</p>';
 					echo '<div class="row">';
 					// if (!empty($university_tax) && !is_wp_error($university_tax))
 					// 	wrap('University:', wrap_tag($university_tax, 'badge badge-secondary'));
@@ -270,7 +270,7 @@ function iot_add_to_content($content)
 	ob_start();
 	$tax = wp_get_post_terms($post->ID, IOT_TAX_QUESTION);
 	if (!empty($tax) && !is_wp_error($tax)) {
-		echo wrap_link("Filter Question", get_term_link($tax[0]), 'badge badge-light');
+		echo wrap_link("Filtrer par question", get_term_link($tax[0]), 'badge badge-light');
 	}
 	$university_tax = wp_get_post_terms($post->ID, IOT_TAX_UNIVERSITY);
 	if (!empty($university_tax) && !is_wp_error($university_tax)) {
