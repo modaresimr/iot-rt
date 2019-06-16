@@ -79,6 +79,7 @@ function iot_login(){
         echo wrap_link('Inscription',site_url('register'),'btn btn-success');
     }else{
         echo wrap_link('Bienvenue'. strtoupper($user->last_name) .', '. $user->first_name ,site_url('/users').'?user_id='.$user->ID,'');
+        echo get_user_meta($user->ID,  IOT_USR_UNIVERSITY, true );
         echo "<div class='btn-group-vertical'>";
         echo wrap_link('Modifier votre réponse' ,site_url('/iot-wiki').'?edit=true','btn btn-primary');
         echo wrap_link('Voir votre réponse' ,site_url('/iot-wiki').'?edit=false','btn btn-success');
