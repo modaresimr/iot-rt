@@ -81,7 +81,7 @@ function iot_login(){
         echo wrap_link('Bienvenue'. strtoupper($user->last_name) .', '. $user->first_name ,site_url('/users').'?user_id='.$user->ID,'');
         echo "<div class='btn-group-vertical'>";
         echo wrap_link('Modifier votre réponse' ,site_url('/iot-wiki').'?edit=true','btn btn-primary');
-        echo wrap_link('Voir votre réponse' ,site_url('/iot-wiki').'?edit=true','btn btn-success');
+        echo wrap_link('Voir votre réponse' ,site_url('/iot-wiki').'?edit=false','btn btn-success');
         echo wrap_link('Logout',wp_logout_url(),'btn btn-danger');
     }
     echo "</div>";
