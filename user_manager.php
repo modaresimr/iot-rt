@@ -24,8 +24,14 @@ function iot_register_handler()
 				$errors = register_new_user($email, $email);
 				if (is_wp_error($errors)) {
 					$form->errors['email'] = " Error! Email is duplicated!";
-				}else
+				}else{
 					$userID = $errors;
+					$user = new WP_User((int)$userID);
+					$password_reset_ket = get_password_reset_key($user);
+					$rp_link = '<a href="' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '">' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '</a>';
+					wp_mail($email, '[IOT-RT.ML] Registeration Success', ' To set your password Please click on ' . $rp_link);
+					$form->success_message('Success! Please check your email for activation link');
+				}
 			}else
 				$userID = $user->ID;
 			/*$args  = array(
@@ -46,14 +52,9 @@ function iot_register_handler()
 				);
 
 				wp_set_object_terms($userID, $university, IOT_USR_UNIVERSITY, true);
-				wp_set_object_terms($userID, $bio, 'iot_user_bio', true);
-				$user = new WP_User((int)$userID);
-				$password_reset_ket = get_password_reset_key($user);
-				$rp_link = '<a href="' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '">' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '</a>';
-
-				wp_mail($email, '[IOT-RT.ML] Registeration Success', ' To set your password Please click on ' . $rp_link);
-				$form->success_message('Success! Please check your email for activation link');
-				echo ' To set your password Please click on ' . $rp_link;
+				wp_set_object_terms($userID, $bio, IOT_USR_BIO, true);
+				
+				//echo ' To set your password Please click on ' . $rp_link;
 				echo $form->messages();
 				return;
 			}
@@ -76,8 +77,10 @@ function iot_register_handler()
 	}
 	echo $form->input_text('iot_fname', 'First Name',$dfname);
 	echo $form->input_text('iot_lname', 'Last Name',$dlname);
-	if(empty($user))
+	if(empty($demail))
 		echo $form->input_email('iot_email', 'Email',$demail);
+	else
+		echo $form->input_hidden('iot_email', $demail);
 	echo $form->input_select('iot_user_university', 'University', '', '', '', '', $duuni, getTaxonomyTree(IOT_TAX_UNIVERSITY, true));
 	echo $form->label('Biolbl', 'Bio');
 	echo wp_editor($_REQUEST['iot_bio'] ?? $dbio, 'iot_bio');
@@ -87,7 +90,7 @@ function iot_register_handler()
 
 
 function iot_profile_handler(){
-	$user=get_user_by('id',$_GET['user_id']??wp_get_current_user());
+	$user=get_user_by('id',$_GET['user_id']??get_current_user_id());
 	if(empty($user)||$user->ID==0){
 		echo 'No user!';
 		return;
