@@ -52,10 +52,13 @@ function iot_register_handler()
 						'last_name' => $lname
 					)
 				);
-
-				update_user_meta($userID, $university, IOT_USR_UNIVERSITY, true);
-				update_user_meta($userID, $bio, IOT_USR_BIO, true);
-				
+				//echo delete_user_meta($userID, IOT_USR_UNIVERSITY);
+				//echo delete_user_meta($userID, IOT_USR_BIO);
+				update_user_meta($userID, IOT_USR_UNIVERSITY,$university);
+				update_user_meta($userID, IOT_USR_BIO,$bio);
+				// so check and make sure the stored value matches $new_value
+				if ( get_user_meta($userID,  IOT_USR_UNIVERSITY, true ) != $university )
+					wp_die('An error occurred');
 				//echo ' To set your password Please click on ' . $rp_link;
 				echo $form->messages();
 				return;
