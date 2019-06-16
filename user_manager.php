@@ -30,10 +30,12 @@ function iot_register_handler()
 					$password_reset_ket = get_password_reset_key($user);
 					$rp_link = '<a href="' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '">' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '</a>';
 					wp_mail($email, '[IOT-RT.ML] Registeration Success', ' To set your password Please click on ' . $rp_link);
-					$form->success_message('Success! Please check your email for activation link');
+					$form->success_message('Succès! vérifier votre email pour le lien d\'activation, S\'il vous plaît');
 				}
-			}else
+			}else{
 				$userID = $user->ID;
+				$form->success_message("Succès");
+			}
 			/*$args  = array(
 			'meta_key' => IOT_USR_UNIVERSITY, //any custom field name
 			'meta_value' => $university //the value to compare against
@@ -51,8 +53,8 @@ function iot_register_handler()
 					)
 				);
 
-				wp_set_object_terms($userID, $university, IOT_USR_UNIVERSITY, true);
-				wp_set_object_terms($userID, $bio, IOT_USR_BIO, true);
+				update_user_meta($userID, $university, IOT_USR_UNIVERSITY, true);
+				update_user_meta($userID, $bio, IOT_USR_BIO, true);
 				
 				//echo ' To set your password Please click on ' . $rp_link;
 				echo $form->messages();
