@@ -69,8 +69,8 @@ public function update($new_instance, $old_instance)
 
 function iot_q_list_handler(){
 
- $taxName = IOT_TAX_UNIVERSITY;
-$terms = get_terms(IOT_TAX_UNIVERSITY,array('parent' => 0,'orderby'=>'name'));
+
+$terms = get_terms(IOT_TAX_UNIVERSITY,array('parent' => 0,'orderby'=>'name', 'hide_empty' => false));
 echo '<div class="list-group">';
 foreach($terms as $term) {  
    echo '<a class="list-group-item list-group-item-action '.(($_REQUEST[IOT_TAX_UNIVERSITY]??'')==$term->name?'active':'').'" href="'.site_url('/iot-wiki').'?'.IOT_TAX_UNIVERSITY.'='.$term->name.'">'.$term->name.'</a>';

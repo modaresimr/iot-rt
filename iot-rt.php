@@ -74,7 +74,7 @@ function iot_post_update()
 	// }
 
 	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true); //wp_get_object_terms($user->ID, IOT_TAX_UNIVERSITY) ?? '';
-	if (empty($unis) && empty($_REQUEST[IOT_FRM_POST_UNIVERSITY])) {
+	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
 
 		echo json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
 		die();
@@ -167,7 +167,7 @@ function iot_q_handler($atts, $content = null)
 	// 	return;
 	// }
 	// $unis = wp_get_object_terms($user->ID, IOT_TAX_UNIVERSITY) ?? '';
-	// if (empty($unis) && empty($_REQUEST[IOT_FRM_POST_UNIVERSITY])) {
+	// if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
 	// 	//echo json_encode(array('status'=>'Error','error_code'=>"404",'message' => "No University"));
 	// 	wp_die("No University");
 	// 	return;
@@ -176,7 +176,7 @@ function iot_q_handler($atts, $content = null)
 	// $department ='Network';
 	// $university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis[0]->name;
 	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true);
-	if (empty($unis) && empty($_REQUEST[IOT_FRM_POST_UNIVERSITY])) {
+	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
 		return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
 	}
 	// $department = $_REQUEST[IOT_TAX_DEPARTMENT] ?? $dps[0]->name;

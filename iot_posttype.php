@@ -31,7 +31,7 @@ function create_iot_posttype() {
         'hierarchical' => true,
         'label' => 'Question'
      ));
-	   
+	 addDefaultUni();   
   }
   add_action( 'init', 'create_iot_posttype' );
   
