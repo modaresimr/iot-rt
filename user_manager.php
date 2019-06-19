@@ -97,7 +97,12 @@ function iot_register_handler()
 function iot_profile_handler(){
 	$user=get_user_by('id',$_GET['user_id']??get_current_user_id());
 	if(empty($user)||$user->ID==0){
-		echo 'No user!';
+		echo 'You should login to view this page! ';
+		echo "<div class='btn-group'>";
+        echo wrap_link('Connexion',wp_login_url(),'btn btn-primary');
+		echo wrap_link('Inscription',site_url('register'),'btn btn-success');
+		echo "</div>";
+		//header('Location: '.wp_login_url());
 		return;
 	}
 	if($user==wp_get_current_user())
