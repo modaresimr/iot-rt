@@ -54,12 +54,17 @@ function iot_collapse_handler($atts, $content)
 			}
 
 			$code= do_shortcode($newcontent);
+			$checkedcode=str_replace('<p>','',$code);
+			$checkedcode=str_replace('</p>','',$checkedcode);
+			//$doc = new DOMDocument();
+			//$doc->loadHTML($code);
+			//var_dump(get_text_from_dom($doc->documentElement));
 			echo $code;
 			?>
 		</div>
 	</div>
 	<?php
-	if((!$edit)&& empty($code)){
+	if((!$edit)&& empty($checkedcode)){
 		ob_get_clean();
 		return "";
 	}
