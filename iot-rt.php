@@ -268,7 +268,7 @@ function iot_q_handler($atts, $content = null)
 	<?php
 	if((!$edit)&&(empty($post1)||empty($post1->ID))){
 		ob_get_clean();
-		return "<A>ali</A>";
+		return "";
 	}
 			
 	return ob_get_clean();
