@@ -54,15 +54,15 @@ function iot_collapse_handler($atts, $content)
 			}
 
 			$code= do_shortcode($newcontent);
-			if((!$edit)&& empty($code)){
-				ob_get_clean();
-				return "";
-			}
 			echo $code;
 			?>
 		</div>
 	</div>
 	<?php
+	if((!$edit)&& empty($code)){
+		ob_get_clean();
+		return "";
+	}
 	return ob_get_clean();
 }
 
@@ -270,7 +270,7 @@ function iot_q_handler($atts, $content = null)
 	<?php
 	if((!$edit)&&(empty($post1)||empty($post1->ID))){
 		ob_get_clean();
-		return "";
+		return "<A>ali</A>";
 	}
 			
 	return ob_get_clean();
