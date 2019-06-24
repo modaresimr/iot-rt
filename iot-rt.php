@@ -53,8 +53,10 @@ function iot_collapse_handler($atts, $content)
 			}
 
 			$code= do_shortcode($newcontent);
-			if(empty($code))
+			if(empty($code)){
+				ob_get_clean();
 				return "";
+			}
 			echo $code;
 			?>
 		</div>
@@ -211,7 +213,7 @@ function iot_q_handler($atts, $content = null)
 		</div>
 
 		<div id="collapse<?php echo $myid ?>" class="collapse show" data-parent="<?php echo $atts['data-parent']; ?>">
-			<small id="emailHelp" class="form-text text-muted"> <?php echo $atts['comment'] ?> </small>
+			<small class="form-text text-muted"> <?php echo $atts['comment'] ?> </small>
 
 			<?php
 			if (empty($post1)) {
@@ -265,8 +267,11 @@ function iot_q_handler($atts, $content = null)
 		</div>
 	</div>
 	<?php
-	if(!$edit&&empty($post1)||empty($post1->ID))
-			return "";
+	if(!$edit&&empty($post1)||empty($post1->ID)){
+		ob_get_clean();
+		return "";
+	}
+			
 	return ob_get_clean();
 }
 function iot_add_to_content($content)
