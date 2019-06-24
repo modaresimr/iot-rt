@@ -97,7 +97,7 @@ function iot_register_handler()
 function iot_profile_handler(){
 	$user=get_user_by('id',$_GET['user_id']??get_current_user_id());
 	if(empty($user)||$user->ID==0){
-		echo 'You should login to view this page! ';
+		echo 'Vous devez vous connecter pour voir ce contenu';
 		echo "<div class='btn-group'>";
         echo wrap_link('Connexion',wp_login_url(),'btn btn-primary');
 		echo wrap_link('Inscription',site_url('register'),'btn btn-success');

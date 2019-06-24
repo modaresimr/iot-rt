@@ -21,6 +21,12 @@ add_shortcode('iot_collapse', 'iot_collapse_handler');
 add_shortcode('iot_collapse1', 'iot_collapse_handler');
 add_shortcode('iot_collapse2', 'iot_collapse_handler');
 add_shortcode('iot_uni_info', 'iot_uni_info_handler');
+add_shortcode('iot_notlogin', 'iot_notlogin_handler');
+function iot_notlogin_handler($atts, $content){
+	if(isLogin())
+		return '';
+	return $content;
+}
 function iot_uni_info_handler($atts, $content){
 
 	$user = wp_get_current_user();
@@ -168,7 +174,14 @@ function iot_post_update()
 	die();
 	return;
 }
+function isLogin(){
+	$user = wp_get_current_user();
+	if (empty($user)||empty($user->ID))
+		return false;
 
+	return true;
+
+}
 function iot_q_handler($atts, $content = null)
 {
 	$myid = generateRandomString();
@@ -207,14 +220,16 @@ function iot_q_handler($atts, $content = null)
 
 	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true);
 	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
-		return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
+		//return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
+		$unis='';
 	}
 	// $department = $_REQUEST[IOT_TAX_DEPARTMENT] ?? $dps[0]->name;
 	$department = 'Network';
 	$university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis;
 	//$department_tax = get_term_by('name', $department, IOT_TAX_DEPARTMENT);
 	//$university_tax = get_term_by('name', $university, IOT_TAX_UNIVERSITY);
-
+	
+	
 	$edit = ($_REQUEST['edit'] ?? '') == "true";
 	$question = $atts['question'];
 	$tax = get_term_by('name', $question, IOT_TAX_QUESTION);
@@ -225,7 +240,8 @@ function iot_q_handler($atts, $content = null)
 
 	$post1 = findpost($university, $department, $question, $edit, $user);
 	$has_permission = has_permission($post1);
-	if((!$edit)&&(empty($post1)||empty($post1->ID))){
+	
+	if(isLogin()&&(!$edit)&&(empty($post1)||empty($post1->ID))){
 		ob_get_clean();
 		return "";
 	}
@@ -237,11 +253,18 @@ function iot_q_handler($atts, $content = null)
 		<div class="card-header btn-link" id="heading<?php echo $myid; ?>" data-toggle="collapse" data-target="#collapse<?php echo $myid; ?>" aria-controls="collapse<?php echo $myid; ?>">
 			<h5 class="mb-0"><?php echo $question; ?></h5>
 		</div>
-
+		
 		<div id="collapse<?php echo $myid ?>" class="collapse show" data-parent="<?php echo $atts['data-parent']; ?>">
-			<small class="form-text text-muted"> <?php echo $atts['comment']; ?> </small>
+			<h5 class="form-text text-muted"> <?php echo $atts['comment']; ?> </h5>
 
 			<?php
+			if(isLogin()){
+				echo 'Vous devez vous connecter pour voir ce contenu.';
+				echo "<div class='btn-group'>";
+        		echo wrap_link('Connexion',wp_login_url(),'btn btn-primary');
+				echo wrap_link('Inscription',site_url('register'),'btn btn-success');
+				echo "</div>";
+			}else{
 			if (empty($post1)) {
 				$post1 = (object)[
 					'post_content' => '',
@@ -288,8 +311,10 @@ function iot_q_handler($atts, $content = null)
 					echo apply_filters('the_content', $post1->post_content);
 				}
 			}
+			}
 			?>
 		</div>
+		
 	</div>
 	<?php
 	
