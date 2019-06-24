@@ -149,6 +149,7 @@ function iot_q_handler($atts, $content = null)
 	ob_start();
 	$atts  = shortcode_atts(array(
 		'question' => '',
+		'comment' => '',
 		'data-parent' => '#main'
 	), $atts);
 	if (empty($atts['question']))
@@ -210,6 +211,8 @@ function iot_q_handler($atts, $content = null)
 		</div>
 
 		<div id="collapse<?php echo $myid ?>" class="collapse show" data-parent="<?php echo $atts['data-parent']; ?>">
+			<small id="emailHelp" class="form-text text-muted"> <?php echo $atts['comment'] ?> </small>
+
 			<?php
 			if (empty($post1)) {
 				$post1 = (object)[
@@ -262,7 +265,7 @@ function iot_q_handler($atts, $content = null)
 		</div>
 	</div>
 	<?php
-	if(empty($post1)||empty($post1->ID))
+	if(!$edit&&empty($post1)||empty($post1->ID))
 			return "";
 	return ob_get_clean();
 }
