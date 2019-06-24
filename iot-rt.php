@@ -22,12 +22,14 @@ add_shortcode('iot_collapse1', 'iot_collapse_handler');
 add_shortcode('iot_collapse2', 'iot_collapse_handler');
 add_shortcode('iot_uni_info', 'iot_uni_info_handler');
 add_shortcode('iot_notlogin', 'iot_notlogin_handler');
-function iot_notlogin_handler($atts, $content){
-	if(isLogin())
+function iot_notlogin_handler($atts, $content)
+{
+	if (isLogin())
 		return '';
 	return $content;
 }
-function iot_uni_info_handler($atts, $content){
+function iot_uni_info_handler($atts, $content)
+{
 
 	$user = wp_get_current_user();
 	if (!empty($_GET['user_id'])) {
@@ -35,14 +37,14 @@ function iot_uni_info_handler($atts, $content){
 		if (empty($user))
 			$user = wp_get_current_user();
 	}
-	
+
 	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true);
 	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
 		return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
 	}
-	
-	$university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis;	
-	return "<h3> University:".$university.'</h3>';
+
+	$university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis;
+	return "<h3> University:" . $university . '</h3>';
 }
 function iot_collapse_handler($atts, $content)
 {
@@ -69,17 +71,17 @@ function iot_collapse_handler($atts, $content)
 
 			//echo do_shortcode(str_replace("]", " data-parent=#".$myid."]", $content));
 			preg_match_all('/\[\w+/', $content, $matches);
-			$newcontent = str_replace('<br />','',$content);
-			$newcontent = str_replace('data-parent','data-parent_old',$newcontent);
+			$newcontent = str_replace('<br />', '', $content);
+			$newcontent = str_replace('data-parent', 'data-parent_old', $newcontent);
 			$matches = array_unique($matches[0]);
 			foreach ($matches as $m) {
 				$newcontent = str_replace($m, $m . " data-parent='#collapse$myid'", $newcontent);
 			}
 
-			$code= do_shortcode($newcontent);
-			$checkedcode=str_replace('<p>','',$code);
-			$checkedcode=str_replace('</p>','',$checkedcode);
-			$checkedcode=trim($checkedcode);
+			$code = do_shortcode($newcontent);
+			$checkedcode = str_replace('<p>', '', $code);
+			$checkedcode = str_replace('</p>', '', $checkedcode);
+			$checkedcode = trim($checkedcode);
 			//$doc = new DOMDocument();
 			//$doc->loadHTML($code);
 			//var_dump(get_text_from_dom($doc->documentElement));
@@ -88,7 +90,7 @@ function iot_collapse_handler($atts, $content)
 		</div>
 	</div>
 	<?php
-	if((!$edit)&& empty($checkedcode)){
+	if ((!$edit) && empty($checkedcode)) {
 		ob_get_clean();
 		return "";
 	}
@@ -139,7 +141,7 @@ function iot_post_update()
 
 	$postarr = array();
 	$postarr['ID'] = $_POST[IOT_FRM_POST_ID];
-	
+
 	$postarr['post_title'] = $university . " - " . $department . " - " . $question;
 	$postarr['post_content'] = $_POST[IOT_FRM_POST_CONTENT];
 
@@ -174,13 +176,13 @@ function iot_post_update()
 	die();
 	return;
 }
-function isLogin(){
+function isLogin()
+{
 	$user = wp_get_current_user();
-	if (empty($user)||empty($user->ID))
+	if (empty($user) || empty($user->ID))
 		return false;
 
 	return true;
-
 }
 function iot_q_handler($atts, $content = null)
 {
@@ -221,15 +223,15 @@ function iot_q_handler($atts, $content = null)
 	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true);
 	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
 		//return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
-		$unis='';
+		$unis = '';
 	}
 	// $department = $_REQUEST[IOT_TAX_DEPARTMENT] ?? $dps[0]->name;
 	$department = 'Network';
 	$university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis;
 	//$department_tax = get_term_by('name', $department, IOT_TAX_DEPARTMENT);
 	//$university_tax = get_term_by('name', $university, IOT_TAX_UNIVERSITY);
-	
-	
+
+
 	$edit = ($_REQUEST['edit'] ?? '') == "true";
 	$question = $atts['question'];
 	$tax = get_term_by('name', $question, IOT_TAX_QUESTION);
@@ -240,85 +242,85 @@ function iot_q_handler($atts, $content = null)
 
 	$post1 = findpost($university, $department, $question, $edit, $user);
 	$has_permission = has_permission($post1);
-	
-	if(isLogin()&&(!$edit)&&(empty($post1)||empty($post1->ID))){
+
+	if (isLogin() && (!$edit) && (empty($post1) || empty($post1->ID))) {
 		ob_get_clean();
 		return "";
 	}
-	if($edit)
+	if ($edit ||!isLogin())
 		echo '<script>setTimeout(function() {$(".collapse").collapse("hide");	}, 1000);</script>';
 	?>
-	
+
 	<div class="" style="padding-left:10px;">
 		<div class="card-header btn-link" id="heading<?php echo $myid; ?>" data-toggle="collapse" data-target="#collapse<?php echo $myid; ?>" aria-controls="collapse<?php echo $myid; ?>">
 			<h5 class="mb-0"><?php echo $question; ?></h5>
 		</div>
-		
+
 		<div id="collapse<?php echo $myid ?>" class="collapse show" data-parent="<?php echo $atts['data-parent']; ?>">
 			<h5 class="form-text text-muted"> <?php echo $atts['comment']; ?> </h5>
 
 			<?php
-			if(!isLogin()){
+			if (!isLogin()) {
 				echo 'Vous devez vous connecter pour voir ce contenu.';
 				echo "<div class='btn-group'>";
-        		echo wrap_link('Connexion',wp_login_url(),'btn btn-primary');
-				echo wrap_link('Inscription',site_url('register'),'btn btn-success');
+				echo wrap_link('Connexion', wp_login_url(), 'btn btn-primary');
+				echo wrap_link('Inscription', site_url('register'), 'btn btn-success');
 				echo "</div>";
-			}else{
-			if (empty($post1)) {
-				$post1 = (object)[
-					'post_content' => '',
-					'ID' => '0',
-					'post_author' => 0
-				];
-				$metas = '';
-			} else
-				$metas = get_post_meta($post1->ID);
-
-			if ($has_permission && $edit) {
-				echo wrap_link('Filtrer par question', get_term_link($tax), 'badge badge-light');
-				echo '<form method="post" id="form_' . $myid . '" class="iot-form" action="' . admin_url('admin-ajax.php') . '">';
-				echo '<input type="hidden" name="action" value="iot_post_update"/>';
-				echo '<input type="hidden" name="' . IOT_FRM_POST_QUESTION . '" value="' . $tax->name . '"/>';
-				//echo '<hidden name="'.IOT_FRM_POST_FILE.'[]" />';
-				echo wp_editor($post1->post_content, IOT_FRM_POST_CONTENT . $myid, array('textarea_name' => IOT_FRM_POST_CONTENT, 'textarea_rows' => 20));
-				echo '<input type="hidden" name="' . IOT_FRM_POST_ID . '" id="' . IOT_FRM_POST_ID . '" value="' . $post1->ID . '"/>';
-				echo '<button name="iot_frm_submit" class="btn btn-primary" type="submit" value="Submit">Submit</button>';
-				echo '</form>';
-				insertFileUploadScript($myid);
-				echo '<br/>';
-				//echo '<div class="row">';
-				//if (!empty($university_tax) && !is_wp_error($university_tax))
-				//wrap('University:', wrap_tag($university_tax, 'badge badge-secondary'));
-				//	echo wrap_link($university_tax->name,site_url('/iot-wiki').'?'.IOT_TAX_UNIVERSITY.'='.$university_tax->name,'badge badge-light');
-
-				// if (!empty($department_tax) && !is_wp_error($department_tax))
-				// 	wrap('Department:', wrap_tag($department_tax, 'badge badge-primary'));
-				//echo '</div>';
 			} else {
-				if ($post1->ID == 0) {
+				if (empty($post1)) {
+					$post1 = (object)[
+						'post_content' => '',
+						'ID' => '0',
+						'post_author' => 0
+					];
+					$metas = '';
+				} else
+					$metas = get_post_meta($post1->ID);
+
+				if ($has_permission && $edit) {
 					echo wrap_link('Filtrer par question', get_term_link($tax), 'badge badge-light');
-					echo '<p>Pas encore de texte</p>';
-					echo '<div class="row">';
-					// if (!empty($university_tax) && !is_wp_error($university_tax))
-					// 	wrap('University:', wrap_tag($university_tax, 'badge badge-secondary'));
+					echo '<form method="post" id="form_' . $myid . '" class="iot-form" action="' . admin_url('admin-ajax.php') . '">';
+					echo '<input type="hidden" name="action" value="iot_post_update"/>';
+					echo '<input type="hidden" name="' . IOT_FRM_POST_QUESTION . '" value="' . $tax->name . '"/>';
+					//echo '<hidden name="'.IOT_FRM_POST_FILE.'[]" />';
+					echo wp_editor($post1->post_content, IOT_FRM_POST_CONTENT . $myid, array('textarea_name' => IOT_FRM_POST_CONTENT, 'textarea_rows' => 20));
+					echo '<input type="hidden" name="' . IOT_FRM_POST_ID . '" id="' . IOT_FRM_POST_ID . '" value="' . $post1->ID . '"/>';
+					echo '<button name="iot_frm_submit" class="btn btn-primary" type="submit" value="Submit">Submit</button>';
+					echo '</form>';
+					insertFileUploadScript($myid);
+					echo '<br/>';
+					//echo '<div class="row">';
+					//if (!empty($university_tax) && !is_wp_error($university_tax))
+					//wrap('University:', wrap_tag($university_tax, 'badge badge-secondary'));
+					//	echo wrap_link($university_tax->name,site_url('/iot-wiki').'?'.IOT_TAX_UNIVERSITY.'='.$university_tax->name,'badge badge-light');
+
 					// if (!empty($department_tax) && !is_wp_error($department_tax))
 					// 	wrap('Department:', wrap_tag($department_tax, 'badge badge-primary'));
-					echo '</div>';
+					//echo '</div>';
 				} else {
-					global $post;
-					$post = $post1;
-					echo apply_filters('the_content', $post1->post_content);
+					if ($post1->ID == 0) {
+						echo wrap_link('Filtrer par question', get_term_link($tax), 'badge badge-light');
+						echo '<p>Pas encore de texte</p>';
+						echo '<div class="row">';
+						// if (!empty($university_tax) && !is_wp_error($university_tax))
+						// 	wrap('University:', wrap_tag($university_tax, 'badge badge-secondary'));
+						// if (!empty($department_tax) && !is_wp_error($department_tax))
+						// 	wrap('Department:', wrap_tag($department_tax, 'badge badge-primary'));
+						echo '</div>';
+					} else {
+						global $post;
+						$post = $post1;
+						echo apply_filters('the_content', $post1->post_content);
+					}
 				}
-			}
 			}
 			?>
 		</div>
-		
+
 	</div>
 	<?php
-	
-			
+
+
 	return ob_get_clean();
 }
 function iot_add_to_content($content)
