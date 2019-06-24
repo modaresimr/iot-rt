@@ -166,8 +166,6 @@ function iot_q_handler($atts, $content = null)
 	}
 	//wp_set_object_terms($user->ID, 'University Paris 13', IOT_TAX_UNIVERSITY, true);
 	//wp_set_object_terms($user->ID, 'Network', IOT_TAX_DEPARTMENT, true);
-
-
 	// $dps = wp_get_object_terms($user->ID, IOT_TAX_DEPARTMENT) ?? '';
 	// if (empty($dps) && empty($_REQUEST[IOT_FRM_POST_DEPARTMENT])) {
 	// 	//echo json_encode(array('status'=>'Error','error_code'=>"404",'message' => "No Department"));
@@ -183,6 +181,7 @@ function iot_q_handler($atts, $content = null)
 	// //$department = $_REQUEST[IOT_TAX_DEPARTMENT] ?? $dps[0]->name;
 	// $department ='Network';
 	// $university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis[0]->name;
+
 	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true);
 	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
 		return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
@@ -214,7 +213,7 @@ function iot_q_handler($atts, $content = null)
 		</div>
 
 		<div id="collapse<?php echo $myid ?>" class="collapse show" data-parent="<?php echo $atts['data-parent']; ?>">
-			<small class="form-text text-muted"> <?php echo $atts['comment'] ?> </small>
+			<small class="form-text text-muted"> <?php echo $atts['comment']; ?> </small>
 
 			<?php
 			if (empty($post1)) {
@@ -264,7 +263,6 @@ function iot_q_handler($atts, $content = null)
 				}
 			}
 			?>
-
 		</div>
 	</div>
 	<?php
