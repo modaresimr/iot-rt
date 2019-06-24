@@ -52,7 +52,10 @@ function iot_collapse_handler($atts, $content)
 				$newcontent = str_replace($m, $m . " data-parent='#collapse$myid'", $newcontent);
 			}
 
-			echo do_shortcode($newcontent);
+			$code= do_shortcode($newcontent);
+			if(empty($code))
+				return "";
+			echo $code;
 			?>
 		</div>
 	</div>
@@ -104,6 +107,7 @@ function iot_post_update()
 
 	$postarr = array();
 	$postarr['ID'] = $_POST[IOT_FRM_POST_ID];
+	
 	$postarr['post_title'] = $university . " - " . $department . " - " . $question;
 	$postarr['post_content'] = $_POST[IOT_FRM_POST_CONTENT];
 
@@ -196,12 +200,10 @@ function iot_q_handler($atts, $content = null)
 	$post1 = findpost($university, $department, $question, $edit, $user);
 	$has_permission = has_permission($post1);
 
+	if($edit)
+		echo '<script>setTimeout(function() {$(".collapse").collapse("hide");	}, 1000);</script>';
 	?>
-	<script>
-		setTimeout(function() {
-			$(".collapse").collapse('hide');
-		}, 1000);
-	</script>
+	
 	<div class="" style="padding-left:10px;">
 		<div class="card-header btn-link" id="heading<?php echo $myid ?>" data-toggle="collapse" data-target="#collapse<?php echo $myid ?>" aria-controls="collapse<?php echo $myid ?>">
 			<h5 class="mb-0"><?php echo $question; ?></h5>
@@ -223,7 +225,7 @@ function iot_q_handler($atts, $content = null)
 				echo wrap_link('Filtrer par question', get_term_link($tax), 'badge badge-light');
 				echo '<form method="post" id="form_' . $myid . '" class="iot-form" action="' . admin_url('admin-ajax.php') . '">';
 				echo '<input type="hidden" name="action" value="iot_post_update"/>';
-				echo '<input type="hidden" name="' . IOT_FRM_POST_QUESTION . '" value="' . $tax->slug . '"/>';
+				echo '<input type="hidden" name="' . IOT_FRM_POST_QUESTION . '" value="' . $tax->name . '"/>';
 				//echo '<hidden name="'.IOT_FRM_POST_FILE.'[]" />';
 				echo wp_editor($post1->post_content, IOT_FRM_POST_CONTENT . $myid, array('textarea_name' => IOT_FRM_POST_CONTENT, 'textarea_rows' => 20));
 				echo '<input type="hidden" name="' . IOT_FRM_POST_ID . '" id="' . IOT_FRM_POST_ID . '" value="' . $post1->ID . '"/>';
@@ -260,6 +262,8 @@ function iot_q_handler($atts, $content = null)
 		</div>
 	</div>
 	<?php
+	if(empty($post1)||empty($post1->ID))
+			return "";
 	return ob_get_clean();
 }
 function iot_add_to_content($content)
