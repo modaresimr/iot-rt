@@ -24,6 +24,7 @@ add_shortcode('iot_collapse2', 'iot_collapse_handler');
 function iot_collapse_handler($atts, $content)
 {
 	ob_start();
+	$edit = ($_REQUEST['edit'] ?? '') == "true";
 	$atts  = shortcode_atts(array(
 		'title' => '',
 		'data-parent' => '#main'
@@ -53,7 +54,7 @@ function iot_collapse_handler($atts, $content)
 			}
 
 			$code= do_shortcode($newcontent);
-			if(empty($code)){
+			if(!$edit&& empty($code)){
 				ob_get_clean();
 				return "";
 			}
