@@ -202,7 +202,10 @@ function iot_q_handler($atts, $content = null)
 
 	$post1 = findpost($university, $department, $question, $edit, $user);
 	$has_permission = has_permission($post1);
-
+	if((!$edit)&&(empty($post1)||empty($post1->ID))){
+		ob_get_clean();
+		return "";
+	}
 	if($edit)
 		echo '<script>setTimeout(function() {$(".collapse").collapse("hide");	}, 1000);</script>';
 	?>
@@ -266,10 +269,7 @@ function iot_q_handler($atts, $content = null)
 		</div>
 	</div>
 	<?php
-	if((!$edit)&&(empty($post1)||empty($post1->ID))){
-		ob_get_clean();
-		return "";
-	}
+	
 			
 	return ob_get_clean();
 }
