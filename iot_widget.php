@@ -71,10 +71,32 @@ function iot_q_list_handler(){
 
 
 $terms = get_terms(IOT_TAX_UNIVERSITY,array('parent' => 0,'orderby'=>'name', 'hide_empty' => false));
-echo '<div class="list-group">';
+echo '<input type="text" id="uni-search-box" class="form-control" placeholder="Entrez l\'université pour la recherche">';
+echo '<div id="uni-search" class="list-group">';
 foreach($terms as $term) {  
    echo '<a class="list-group-item list-group-item-action '.(($_REQUEST[IOT_TAX_UNIVERSITY]??'')==$term->name?'active':'').'" href="'.site_url('/iot-wiki').'?'.IOT_TAX_UNIVERSITY.'='.$term->name.'">'.$term->name.'</a>';
 }
 echo '</div>';
+?>
 
+
+<script>
+$(function(){
+	$('#uni-search-box').keyup(function(){	
+		var current_query = $('#uni-search-box').val().toUpperCase();
+		if (current_query !== "") {
+			$("#uni-search .list-group-item").hide();
+			$("#uni-search .list-group-item").each(function(){
+				var current_keyword = $(this).text().toUpperCase();
+				if (current_keyword.indexOf(current_query) >=0) {
+					$(this).show();    	 	
+				};
+			});    	
+		} else {
+			$("$uni-search .list-group-item").show();
+		};
+	});
+});
+</script>
+<?php
 }
