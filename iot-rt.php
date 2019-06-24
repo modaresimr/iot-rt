@@ -20,7 +20,24 @@ add_shortcode('iot_q2', 'iot_q_handler');
 add_shortcode('iot_collapse', 'iot_collapse_handler');
 add_shortcode('iot_collapse1', 'iot_collapse_handler');
 add_shortcode('iot_collapse2', 'iot_collapse_handler');
+add_shortcode('iot_uni_info', 'iot_uni_info_handler');
+function iot_uni_info_handler($atts, $content){
 
+	$user = wp_get_current_user();
+	if (!empty($_GET['user_id'])) {
+		$user = get_user_by('id', $_GET['user_id']);
+		if (empty($user))
+			$user = wp_get_current_user();
+	}
+	
+	$unis = get_user_meta($user->ID, IOT_USR_UNIVERSITY, true);
+	if (empty($unis) && empty($_REQUEST[IOT_TAX_UNIVERSITY])) {
+		return json_encode(array('status' => 'Error', 'error_code' => "404", 'message' => "No University"));
+	}
+	
+	$university = $_REQUEST[IOT_TAX_UNIVERSITY] ?? $unis;	
+	return "<h3> University:".$university.'</h3>';
+}
 function iot_collapse_handler($atts, $content)
 {
 	ob_start();
