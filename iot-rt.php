@@ -258,7 +258,7 @@ function iot_q_handler($atts, $content = null)
 			<h5 class="form-text text-muted"> <?php echo $atts['comment']; ?> </h5>
 
 			<?php
-			if(isLogin()){
+			if(!isLogin()){
 				echo 'Vous devez vous connecter pour voir ce contenu.';
 				echo "<div class='btn-group'>";
         		echo wrap_link('Connexion',wp_login_url(),'btn btn-primary');
