@@ -208,7 +208,7 @@ function iot_q_handler($atts, $content = null)
 	?>
 	
 	<div class="" style="padding-left:10px;">
-		<div class="card-header btn-link" id="heading<?php echo $myid ?>" data-toggle="collapse" data-target="#collapse<?php echo $myid ?>" aria-controls="collapse<?php echo $myid ?>">
+		<div class="card-header btn-link" id="heading<?php echo $myid; ?>" data-toggle="collapse" data-target="#collapse<?php echo $myid; ?>" aria-controls="collapse<?php echo $myid; ?>">
 			<h5 class="mb-0"><?php echo $question; ?></h5>
 		</div>
 
