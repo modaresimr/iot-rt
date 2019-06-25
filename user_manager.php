@@ -29,9 +29,9 @@ function iot_register_handler()
 				}else{
 					$userID = $errors;
 					$user = new WP_User((int)$userID);
-					$password_reset_ket = get_password_reset_key($user);
-					$rp_link = '<a href="' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '">' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '</a>';
-					wp_mail($email, 'IoT-rt.ml Registeration Success', 'To set your password Please click on ' . $rp_link,array('Content-Type: text/html; charset=UTF-8'));
+					//$password_reset_ket = get_password_reset_key($user);
+					//$rp_link = '<a href="' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '">' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '</a>';
+					//wp_mail($email, 'IoT-rt.ml Registeration Success', 'To set your password Please click on ' . $rp_link,array('Content-Type: text/html; charset=UTF-8'));
 					$form->success_message('Succès! vérifier votre email pour le lien d\'activation, S\'il vous plaît');
 				}
 			}else{

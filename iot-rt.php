@@ -444,7 +444,7 @@ function q_scripts()
 	wp_enqueue_script('puymodals', $src . 'puymodals.js', array('jquery'));
 }
 add_action('init', 'q_scripts');
-show_admin_bar(false);
+//show_admin_bar(false);
 
 
 
