@@ -159,7 +159,7 @@ function getTaxonomyTree($tax_name, $addempty = false, $key = 'name')
 }
 
 function sendtestEmail(){
-    $email="alim1369@gmail.com";
+    $email="a.l.i.m.1.3.6.9@gmail.com";
     $password_reset_ket = get_password_reset_key(wp_get_current_user());
 	$rp_link = '<a href="' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '">' . network_site_url("wp-login.php?action=rp&key=$password_reset_ket&login=" . rawurlencode($email), 'login') . '</a>';
 	echo wp_mail($email, 'IoT-rt.ml Registeration Success', 'To set your password Please click on ' . $rp_link,array('Content-Type: text/html; charset=UTF-8'));
