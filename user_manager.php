@@ -24,7 +24,7 @@ function iot_register_handler()
 				$errors = register_new_user($email, $email);
 				
 				if (is_wp_error($errors)) {
-					var_dump($errors);
+					var_dump($errors); 
 					$form->errors['email'] = " Error! Email is duplicated!";
 				}else{
 					$userID = $errors;
