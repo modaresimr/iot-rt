@@ -25,7 +25,7 @@ function iot_register_handler()
 				
 				if (is_wp_error($errors)) {
 					var_dump($errors); 
-					$form->errors['email'] = " Error! Email is duplicated!";
+					$form->errors['email'] = " Error! Email is duplicated!".$errors->get_error_message();
 				}else{
 					$userID = $errors;
 					$user = new WP_User((int)$userID);
