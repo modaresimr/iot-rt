@@ -159,7 +159,7 @@ function getTaxonomyTree($tax_name, $addempty = false, $key = 'name')
 }
 
 function sendtestEmail(){
-    wp_mail("alim1369@gmail.com","test","test2");
+    echo wp_mail("alim1369@gmail.com","test","test2");
 
 }
 add_action('wp_ajax_iot_testemail', 'sendtestEmail');
